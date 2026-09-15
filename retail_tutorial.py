@@ -85,3 +85,29 @@ def clean_and_prepare_data(df_2009, df_2010):
     print(f"Net revenue: ${df_clean['Revenue'].sum():,.2f}")
 
     return df_clean, df_cancelled
+
+def make_recommendations(df_clean, df_cancelled):
+    print("\n" + "=" * 70)
+    print("STEP 5: THREE DATA-BACKED RECOMMENDATIONS")
+    print("=" * 70)
+
+    total_revenue = df_clean['Revenue'].sum()
+    guest_revenue = df_clean.loc[~df_clean['Is_Registered'], 'Revenue'].sum()
+    guest_share = guest_revenue / total_revenue * 100
+    return_rate = len(df_cancelled) / (len(df_clean) + len(df_cancelled)) * 100
+
+    print(
+        f"1. Guest checkout conversion: Guest sales generated ${guest_revenue:,.2f} "
+        f"({guest_share:.1f}% of clean revenue). Offer a registration incentive "
+        "after checkout to capture customer information for follow-up marketing."
+    )
+    print(
+        f"2. Return monitoring: {len(df_cancelled):,} rows ({return_rate:.1f}% of "
+        "all raw transactions) were cancellations or returns. Review frequent "
+        "returns to identify potential product or fulfillment problems."
+    )
+    print(
+        f"3. Revenue protection: Clean sales total ${total_revenue:,.2f}. Keep the "
+        "positive-quantity and positive-price checks in future reports so zero-price "
+        "or negative transactions do not distort revenue."
+    )
